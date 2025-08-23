@@ -1,20 +1,18 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Castle.Windsor;
 using HRSystem.Domain.ServiceClients;
 using HRSystem.Tests.Common;
 using Moq;
 using Castle.MicroKernel.Registration;
-using System.Data.Entity;
 using HRSystem.Domain.Datasource;
 using FrameworkX.Common.Infrastructure;
 using HRSystem.Web.Controllers;
 using System.Linq;
 using HRSystem.Domain;
+using Xunit;
 
 namespace HRSystem.Tests
 {
-    [TestClass]
     public class IntegrationTest
     {
         #region Test Init and Configure
@@ -24,8 +22,7 @@ namespace HRSystem.Tests
 
         public HRSystemDatabaseInitializer DbInitializer { get; private set; }
 
-        [TestInitialize]
-        public void Init()
+        public IntegrationTest()
         {
             this.container = CastleBootstrapper.Init();
 
@@ -41,8 +38,9 @@ namespace HRSystem.Tests
         private void InitDB()
         {
             this.DbInitializer = new HRSystemDatabaseInitializer();
-            Database.SetInitializer(this.DbInitializer);
-            this.DbInitializer.InitializeDatabase(container.Resolve<HumanResourcesDbContext>());
+            var dbContext = container.Resolve<HumanResourcesDbContext>();
+            dbContext.Database.EnsureCreated();
+            this.DbInitializer.InitializeDatabase(dbContext);
         }
 
         private void SwitchToUser(Employee user)
@@ -50,7 +48,8 @@ namespace HRSystem.Tests
             this.mockUser.SetupGet(u => u.CurrentUserId).Returns(user.Id);
         }
         #endregion
-        [TestMethod]
+
+        [Fact]
         public void End2EndVacationRequestTest()
         {
             SwitchToUser(this.DbInitializer.EmployeeAliVeli);
@@ -61,9 +60,8 @@ namespace HRSystem.Tests
             SwitchToUser(this.DbInitializer.Manager);
             var openedRequest = controller.GetOpenRequests().First();
 
-            Assert.AreEqual(openedRequest.EmployeeId, this.DbInitializer.EmployeeAliVeli.Id);
-            Assert.AreEqual(openedRequest.Days, 3);
-
+            Assert.Equal(openedRequest.EmployeeId, this.DbInitializer.EmployeeAliVeli.Id);
+            Assert.Equal(3, openedRequest.Days);
 
             controller.ApproveRequest(openedRequest.Id);
 

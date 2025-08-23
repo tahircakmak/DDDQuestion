@@ -5,21 +5,20 @@ using HRSystem.Domain.ServiceClients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HRSystem.Web.Controllers
 {
-    public class VacationController : ApiController
+    [ApiController]
+    [Route("[controller]")]
+    public class VacationController : ControllerBase
     {
         public HRUnitOfWork UnitOfWork { get; set; }
         public IPayrollSystem PayrollClient { get; set; }
-
         public IUserProvider User { get; set; }
 
-        [HttpPost]
-        public void OpenVacationRequest(int requestedDays)
+        [HttpPost("OpenVacationRequest")]
+        public IActionResult OpenVacationRequest(int requestedDays)
         {
             var currentEmployee = UnitOfWork.EmployeeRepository.GetById(this.User.CurrentUserId);
             //ToDo: Should EmployeeRepository can access IUserProvider
@@ -27,16 +26,19 @@ namespace HRSystem.Web.Controllers
 
             currentEmployee.OpenVacationRequest(requestedDays);
             UnitOfWork.SaveChanges();
+            return Ok();
         }
 
-        public IEnumerable<Vacation> GetOpenRequests()
+        [HttpGet("GetOpenRequests")]
+        public ActionResult<IEnumerable<Vacation>> GetOpenRequests()
         {
             //ToDo: Should VacationRepository can access IUserProvider
-            return this.UnitOfWork.VacationRepository.GetOpenRequestsForUser(this.User.CurrentUserId);
+            var result = this.UnitOfWork.VacationRepository.GetOpenRequestsForUser(this.User.CurrentUserId);
+            return Ok(result);
         }
 
-        [HttpPost]
-        public IHttpActionResult ApproveRequest(int vacationId)
+        [HttpPost("ApproveRequest")]
+        public IActionResult ApproveRequest(int vacationId)
         {
             var vacation = this.UnitOfWork.VacationRepository.GetById(vacationId);
             vacation.Approve(this.UnitOfWork.VacationRepository, this.PayrollClient);

@@ -5,6 +5,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>HRSystem.Tests</AssemblyName>
     <RootNamespace>HRSystem.Tests</RootNamespace>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
