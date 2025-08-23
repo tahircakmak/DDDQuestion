@@ -16,9 +16,6 @@ namespace HRSystem.Tests.Common
 
         public void InitializeDatabase(HumanResourcesDbContext db)
         {
-            // Remove and recreate database for a clean state
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
 
             this.Manager = new Employee { FullName = "Manager", GrantedAnnualLeaveDays = 20 };
 

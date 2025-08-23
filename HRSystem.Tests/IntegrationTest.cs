@@ -10,6 +10,8 @@ using HRSystem.Web.Controllers;
 using System.Linq;
 using HRSystem.Domain;
 using Xunit;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRSystem.Tests
 {
@@ -39,6 +41,7 @@ namespace HRSystem.Tests
         {
             this.DbInitializer = new HRSystemDatabaseInitializer();
             var dbContext = container.Resolve<HumanResourcesDbContext>();
+            dbContext.Database.GetDbConnection().Open();
             dbContext.Database.EnsureCreated();
             this.DbInitializer.InitializeDatabase(dbContext);
         }

@@ -12,6 +12,11 @@ namespace HRSystem.Domain.Datasource
         {
         }
 
+        public HumanResourcesDbContext(DbContextOptions<HumanResourcesDbContext> options)
+            : base(options)
+        {
+        }
+
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Vacation> Vacations { get; set; }
 

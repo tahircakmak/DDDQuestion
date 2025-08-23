@@ -30,11 +30,11 @@ namespace HRSystem.Web.Controllers
         }
 
         [HttpGet("GetOpenRequests")]
-        public ActionResult<IEnumerable<Vacation>> GetOpenRequests()
+        public IEnumerable<Vacation> GetOpenRequests()
         {
             //ToDo: Should VacationRepository can access IUserProvider
             var result = this.UnitOfWork.VacationRepository.GetOpenRequestsForUser(this.User.CurrentUserId);
-            return Ok(result);
+            return result;
         }
 
         [HttpPost("ApproveRequest")]
