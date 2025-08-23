@@ -1,7 +1,6 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Web", "HRSystem.Web\HRSystem.Web.csproj", "{144F12C2-75EE-4D8B-8DF0-72A77AF198CC}"
 EndProject
@@ -10,11 +9,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkX.Common", "FrameworkX.Common\FrameworkX.Common.csproj", "{40694E25-6508-4850-8B22-7F86C8A62B78}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRSystem.Tests", "HRSystem.Tests\HRSystem.Tests.csproj", "{5CCE02D5-0786-487E-A7BE-76AB7E17AA98}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2AA6AA2C-D977-4198-B36C-CAC920DE584C}"
-	ProjectSection(SolutionItems) = preProject
-		InternalsVisibleTo.cs = InternalsVisibleTo.cs
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +31,12 @@ Global
 		{5CCE02D5-0786-487E-A7BE-76AB7E17AA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CCE02D5-0786-487E-A7BE-76AB7E17AA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CCE02D5-0786-487E-A7BE-76AB7E17AA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CCE02D5-0786-487E-A7BE-76AB7E17AA98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
 		{5CCE02D5-0786-487E-A7BE-76AB7E17AA98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
