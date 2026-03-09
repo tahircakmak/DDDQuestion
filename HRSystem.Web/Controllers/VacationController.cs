@@ -20,7 +20,7 @@ namespace HRSystem.Web.Controllers
         [HttpPost("OpenVacationRequest")]
         public IActionResult OpenVacationRequest(int requestedDays)
         {
-            var currentEmployee = UnitOfWork.EmployeeRepository.GetById(this.User.CurrentUserId);
+            var currentEmployee = UnitOfWork.EmployeeRepository.FindById(this.User.CurrentUserId);
             //ToDo: Should EmployeeRepository can access IUserProvider
             //var currentEmployee = UnitOfWork.EmployeeRepository.GetCurrentEmployee();
 

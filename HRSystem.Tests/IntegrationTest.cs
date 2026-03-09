@@ -55,7 +55,7 @@ namespace HRSystem.Tests
         [Fact]
         public void End2EndVacationRequestTest()
         {
-            SwitchToUser(this.DbInitializer.EmployeeAliVeli);
+            SwitchToUser(this.DbInitializer.EmployeeJohnDoe);
 
             var controller = container.Resolve<VacationController>();
 
@@ -63,7 +63,7 @@ namespace HRSystem.Tests
             SwitchToUser(this.DbInitializer.Manager);
             var openedRequest = controller.GetOpenRequests().First();
 
-            Assert.Equal(openedRequest.EmployeeId, this.DbInitializer.EmployeeAliVeli.Id);
+            Assert.Equal(openedRequest.EmployeeId, this.DbInitializer.EmployeeJohnDoe.Id);
             Assert.Equal(3, openedRequest.Days);
 
             controller.ApproveRequest(openedRequest.Id);
