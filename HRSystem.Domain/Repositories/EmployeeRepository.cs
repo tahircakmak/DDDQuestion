@@ -1,4 +1,5 @@
-﻿using FrameworkX.Common.Infrastructure;
+﻿using FrameworkX.Common;
+using FrameworkX.Common.Infrastructure;
 using HRSystem.Domain.Datasource;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,17 @@ using System.Threading.Tasks;
 
 namespace HRSystem.Domain.Repositories
 {
-    public class EmployeeRepository
+    public class EmployeeRepository: EFRepositoryBase<HumanResourcesDbContext, Employee>
     {
-        public HumanResourcesDbContext db { get; set; }
-        public Employee GetById(int employeeId)
+        public EmployeeRepository(HumanResourcesDbContext db) : base(db)
         {
-            return db.Employees.Find(employeeId);
         }
+
+        // public HumanResourcesDbContext db { get; set; }
+        // public Employee GetById(int employeeId)
+        // {
+        //     return db.Employees.Find(employeeId);
+        // }
         //ToDo: Is it Ok?
 
         //public IUserProvider User { get; set; }

@@ -9,7 +9,6 @@ namespace HRSystem.Domain
     [Table("Employee")]
     public partial class Employee
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Employee()
         {
             this.SubEmployees = new HashSet<Employee>();
@@ -24,10 +23,8 @@ namespace HRSystem.Domain
         public int? ManagerId { get; set; }
         public virtual Employee Manager { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         protected internal virtual ICollection<Employee> SubEmployees { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vacation> Vacations { get; set; }
 
         public int GrantedAnnualLeaveDays { get; set; }

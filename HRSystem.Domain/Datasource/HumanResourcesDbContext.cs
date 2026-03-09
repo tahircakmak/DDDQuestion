@@ -1,34 +1,38 @@
 namespace HRSystem.Domain.Datasource
 {
     using System;
-    using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using Domain;
+    using Microsoft.EntityFrameworkCore;
 
     public partial class HumanResourcesDbContext : DbContext
     {
         public HumanResourcesDbContext()
-            : base("name=HumanResourcesDbContext")
+        {
+        }
+
+        public HumanResourcesDbContext(DbContextOptions<HumanResourcesDbContext> options)
+            : base(options)
         {
         }
 
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Vacation> Vacations { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
                .HasMany(e => e.SubEmployees)
-               .WithOptional(e => e.Manager)
+               .WithOne(e => e.Manager)
                .HasForeignKey(e => e.ManagerId)
-               .WillCascadeOnDelete(false);
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Employee>()
                 .HasMany(e => e.Vacations)
-                .WithRequired(e => e.Employee)
+                .WithOne(e => e.Employee)
                 .HasForeignKey(e => e.EmployeeId)
-                .WillCascadeOnDelete(false);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
