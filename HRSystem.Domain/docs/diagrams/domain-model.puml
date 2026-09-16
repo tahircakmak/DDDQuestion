@@ -1,0 +1,62 @@
+@startuml domain-model
+skinparam classAttributeIconSize 0
+hide empty members
+
+package "Domain" {
+  class Employee <<AggregateRoot>> {
+    + Id: int
+    + FullName: string
+    + ManagerId: int?
+    + GrantedAnnualLeaveDays: int
+    + OpenVacationRequest(requestedDays: int): void
+  }
+
+  class Vacation <<Entity>> {
+    + Id: int
+    + EmployeeId: int
+    + AssignedManagerId: int
+    + Days: int
+    + Status: RequestStatus
+    + Approve(vacationRepository, payrollClient): void
+  }
+
+  enum RequestStatus {
+    RequestOpened
+    Approved
+  }
+
+  Employee "1" *-- "0..*" Vacation : owns >
+  Vacation --> RequestStatus
+  Employee "0..1" --> "0..*" Employee : manages >
+}
+
+package "Domain Services" {
+  interface IPayrollSystem {
+    + AddUnpaidVacation(employeeId: int): void
+  }
+
+  class EmployeeRepository {
+    + EmployeeRepository(db: HumanResourcesDbContext)
+  }
+
+  class VacationRepository {
+    + GetOpenRequestsForUser(userId: int): IEnumerable<Vacation>
+    + GetById(vacationId: int): Vacation
+    + GetApprovedVacationDays(employeeId: int): int
+  }
+}
+
+EmployeeRepository ..> Employee : reads/writes
+VacationRepository ..> Vacation : reads/writes
+Vacation ..> VacationRepository : uses
+Vacation ..> IPayrollSystem : uses
+
+note right of Vacation
+  Approve() takes a repository and an
+  external service client as parameters
+  (see "ToDo: Is it Ok?" in source) --
+  a domain entity depending directly on
+  infrastructure is a smell worth revisiting.
+end note
+
+@enduml
