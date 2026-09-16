@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Test HR",
+            "database": "HRSystem.Tests/bin/Debug/net10.0/hrsystem_test.db"
+        }
+    ]
+}
