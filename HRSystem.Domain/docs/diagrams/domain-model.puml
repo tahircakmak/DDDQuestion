@@ -17,6 +17,7 @@ package "Domain" {
     + AssignedManagerId: int
     + Days: int
     + Status: RequestStatus
+    + {static} Create(employee: Employee, requestedDays: int): Vacation
     + Approve(vacationRepository, payrollClient): void
   }
 
@@ -28,6 +29,26 @@ package "Domain" {
   Employee "1" *-- "0..*" Vacation : owns >
   Vacation --> RequestStatus
   Employee "0..1" --> "0..*" Employee : manages >
+}
+
+package "Datasource" {
+  class HumanResourcesDbContext {
+    + Employees: DbSet<Employee>
+    + Vacations: DbSet<Vacation>
+    + OnModelCreating(modelBuilder): void
+  }
+
+  class HRUnitOfWork {
+    + VacationRepository: VacationRepository
+    + EmployeeRepository: EmployeeRepository
+    + SaveChanges(): void
+  }
+
+  HRUnitOfWork o-- HumanResourcesDbContext
+  HRUnitOfWork o-- "1" VacationRepository
+  HRUnitOfWork o-- "1" EmployeeRepository
+  HumanResourcesDbContext ..> Employee
+  HumanResourcesDbContext ..> Vacation
 }
 
 package "Domain Services" {
@@ -46,6 +67,25 @@ package "Domain Services" {
   }
 }
 
+package "FrameworkX.Common" {
+  interface "IRepository<TModel>" as IRepository {
+    + Delete(model: TModel): void
+    + FindById(primaryFieldValue: int): TModel
+    + Insert(model: TModel): void
+  }
+
+  class "EFRepositoryBase<TDbContext, TModel>" as EFRepositoryBase {
+    # db: TDbContext
+    + FindById(primaryFieldValue: int): TModel
+    + Find(filterExpression): IQueryable<TModel>
+    + Insert(model: TModel): void
+    + Delete(model: TModel): void
+  }
+
+  EFRepositoryBase ..|> IRepository
+}
+
+EmployeeRepository --|> EFRepositoryBase
 EmployeeRepository ..> Employee : reads/writes
 VacationRepository ..> Vacation : reads/writes
 Vacation ..> VacationRepository : uses
