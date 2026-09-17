@@ -20,3 +20,24 @@ each tool for what it's good at rather than defaulting to one:
 Reach for LSP specifically when a grep-based answer could be wrong in a way
 that matters — e.g. missing an inherited member, or treating a same-named
 symbol in two files as the same thing.
+
+## Commit expectations: keep the class diagram in sync
+
+A commit that changes `.cs` files under `HRSystem.Domain/` or
+`FrameworkX.Common/` must also carry an updated
+`HRSystem.Domain/docs/diagrams/domain-model.puml`, plus the `.svg` re-rendered
+from it via the `plantuml-class-diagrams` skill. A `PreToolUse` hook
+(`.claude/hooks/diagram-commit-guard.sh`) enforces this by refusing Claude's
+`git commit` when the diagram is missing or the committed `.svg` doesn't match
+its `.puml`.
+
+- Escape hatch: commit with `--no-verify` when the diagram genuinely needs no
+  update.
+- Stage in a **separate** call from the commit. The guard inspects the index
+  before the command runs, so `git add … && git commit …` as one call is judged
+  against the pre-`add` index and gets refused. (`git commit -a` is fine — the
+  guard accounts for unstaged tracked changes in that case.)
+- The check only sees commits made **through Claude**. A commit from a bare
+  terminal or the VS Code Source Control panel is not inspected.
+- SVG verification is skipped with a warning when `java` or PlantUML is
+  unavailable; the diagram-presence rule still applies.
