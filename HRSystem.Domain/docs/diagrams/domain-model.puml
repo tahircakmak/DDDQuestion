@@ -8,6 +8,7 @@ package "Domain" {
     + FullName: string
     + ManagerId: int?
     + GrantedAnnualLeaveDays: int
+    + HireDate: DateOnly
     + OpenVacationRequest(requestedDays: int): void
   }
 

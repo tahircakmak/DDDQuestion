@@ -29,6 +29,8 @@ namespace HRSystem.Domain
 
         public int GrantedAnnualLeaveDays { get; set; }
 
+        public DateOnly HireDate { get; set; }
+
         public void OpenVacationRequest(int requestedDays)
         {
             this.Vacations.Add(Vacation.Create(this, requestedDays));
