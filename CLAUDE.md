@@ -21,23 +21,15 @@ Reach for LSP specifically when a grep-based answer could be wrong in a way
 that matters — e.g. missing an inherited member, or treating a same-named
 symbol in two files as the same thing.
 
-## Commit expectations: keep the class diagram in sync
+## Commits: use the `commit` skill
 
-A commit that changes `.cs` files under `HRSystem.Domain/` or
-`FrameworkX.Common/` must also carry an updated
-`HRSystem.Domain/docs/diagrams/domain-model.puml`, plus the `.svg` re-rendered
-from it via the `plantuml-class-diagrams` skill. A `PreToolUse` hook
-(`.claude/hooks/diagram-commit-guard.sh`) enforces this by refusing Claude's
-`git commit` when the diagram is missing or the committed `.svg` doesn't match
-its `.puml`.
+Commit through the `commit` skill rather than ad-hoc `git` calls. It carries
+this repo's one non-obvious rule: `HRSystem.Domain/docs/diagrams/domain-model.puml`
+(and its rendered `.svg`) is checked in, so a change to the public surface of a
+type under `HRSystem.Domain/` or `FrameworkX.Common/` belongs in the same commit
+as the diagram refresh.
 
-- Escape hatch: commit with `--no-verify` when the diagram genuinely needs no
-  update.
-- Stage in a **separate** call from the commit. The guard inspects the index
-  before the command runs, so `git add … && git commit …` as one call is judged
-  against the pre-`add` index and gets refused. (`git commit -a` is fine — the
-  guard accounts for unstaged tracked changes in that case.)
-- The check only sees commits made **through Claude**. A commit from a bare
-  terminal or the VS Code Source Control panel is not inspected.
-- SVG verification is skipped with a warning when `java` or PlantUML is
-  unavailable; the diagram-presence rule still applies.
+Whether the diagram is affected is a judgement call — a new or renamed public
+member or a changed relationship means yes; a method body, a private member, or
+formatting means no. The skill spells out that distinction along with this
+repo's commit-message style.
